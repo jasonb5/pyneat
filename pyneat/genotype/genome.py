@@ -1,5 +1,7 @@
 from . import Gene
 
+import copy
+
 class Genome(object):
     """Genotype of an ANN.
 
@@ -15,12 +17,13 @@ class Genome(object):
 
     MAX_HIDDEN = 1000
 
-    def __init__(self, neurons, genes):
+    def __init__(self, genome_id, neurons, genes):
+        self.genome_id = genome_id
         self.neurons = neurons
         self.genes = genes
 
     @classmethod
-    def minimal_fully_connected(cls, neurons):
+    def minimal_fully_connected(cls, genome_id, neurons):
         """Creates fully connected network.
 
         Creates fully connected network only containing the input and output
@@ -38,4 +41,19 @@ class Genome(object):
 
                 innov += 1
 
-        return cls((neurons[0], 0, neurons[1]), genes)
+        return cls(genome_id, (neurons[0], 0, neurons[1]), genes)
+
+    def duplicate(self, genome_id):
+        """Duplicates genome.
+
+        Args:
+            genome_id: new genomes id.
+
+        Returns:
+            Deep copy of current genome, with a new id.
+        """
+        genome = copy.deepcopy(self)
+
+        genome.genome_id = genome_id
+
+        return genome

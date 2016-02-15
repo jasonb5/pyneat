@@ -20,6 +20,8 @@ class Population(object):
         Args:
             genome: initial genome of the population
         """
+        self.neuron = sum(genome.neurons)
+
         for x in xrange(self.conf.pop_size):
             new_genome = genome.duplicate(x)
 

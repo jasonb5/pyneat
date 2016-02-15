@@ -16,3 +16,16 @@ class Gene(object):
         self.weight = weight
         self.innov = innov
         self.enabled = True
+
+    @classmethod
+    def from_attributes(cls, attr):
+        return cls(attr['inode'], attr['onode'], attr['weight'], attr['innov'])
+
+    def get_attributes(self):
+        attr = {
+                'inode': self.inode,
+                'onode': self.onode,
+                'weight': self.weight,
+                'innov': self.innov }
+
+        return attr

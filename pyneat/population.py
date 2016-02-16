@@ -1,4 +1,5 @@
 from . import Species
+from . import Organism
 
 import math
 
@@ -32,9 +33,11 @@ class Population(object):
 
             new_genome.mutate_weights()
 
-            self.speciate(new_genome)
+            org = Organism(new_genome)
 
-            self.organisms.append(new_genome)
+            self.speciate(org)
+
+            self.organisms.append(org)
 
     def speciate(self, organism):
         """Speciate organism.
@@ -45,7 +48,9 @@ class Population(object):
             organism: Organism to be speciated.
         """
         for s in self.species:
-            if s.organisms[0].compatible(self.conf, organism):
+            o = s.organisms[0]
+
+            if o.genome.compatible(self.conf, organism.genome):
                 s.organisms.append(organism)
 
                 return

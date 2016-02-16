@@ -118,6 +118,33 @@ class Population(object):
 
         self.species = survivors
 
+    def remove_weak_species(self):
+        """Removes weak species.
+        
+        Calculates the average fitness for each species then assigns their 
+        portion of the next generation. The proportionality is based on 
+        their contribution to the populations overall fitness. 
+        """
+        total_avg_fitness = 0.0
+
+        for s in self.species:
+            total = sum(map(lambda x: x.rank, s.organisms))
+
+            s.avg_fitness = float(total)/float(len(s.organisms))
+
+            total_avg_fitness += s.avg_fitness
+
+        survivors = []
+
+        for s in self.species:
+            s.offspring = int(math.floor(
+                    (s.avg_fitness*self.conf.pop_size/total_avg_fitness)))
+
+            if s.offspring > 0:
+                survivors.append(s)
+
+        self.species = survivors
+
     def epoch(self, generation):
         """Populations epoch.
 
@@ -141,3 +168,5 @@ class Population(object):
         self.rank()
 
         self.remove_stagnating_species()
+
+        self.remove_weak_species()

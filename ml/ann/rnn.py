@@ -87,7 +87,7 @@ class RecurrentNeuralNetwork(object):
 
         dtemp = np.dot(self.wi, di)+np.dot(self.wh, self.dh)+np.dot(self.wb, self.do)
 
-        if self.act_func:
+        if self.act_func and dtemp.shape[0] > 0:
             self.dh = self.act_func(dtemp)
         else:
             self.dh = dtemp

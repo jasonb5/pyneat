@@ -5,3 +5,4 @@ class Conf(object):
         self.coef_disjoint = 1.0
         self.compat_threshold = 2.0
         self.survival_rate = 0.8
+        self.stagnation_threshold = 15

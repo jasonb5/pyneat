@@ -10,3 +10,5 @@ class Species(object):
     """
     def __init__(self):
         self.organisms = []
+        self.max_fitness = 0
+        self.age_since_imp = 0

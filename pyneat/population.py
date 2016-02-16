@@ -91,6 +91,33 @@ class Population(object):
         for p in xrange(len(parents)):
             parents[p].rank = p+1
 
+    def remove_stagnating_species(self):
+        """Remove stagnating species.
+
+        Updates a species max_fitness, ages the species if no improvement has
+        occurred and removes species older than the stagnation threshold.
+        """
+        survivors = []
+
+        for s in self.species:
+            imp = False    
+
+            for o in s.organisms:
+                if o.fitness > s.max_fitness:
+                    imp = True
+
+                    s.max_fitness = o.fitness
+
+                    s.age_since_imp = 0
+
+            if not imp:
+                s.age_since_imp += 1
+
+            if s.age_since_imp < self.conf.stagnation_threshold:
+                survivors.append(s)
+
+        self.species = survivors
+
     def epoch(self, generation):
         """Populations epoch.
 
@@ -112,3 +139,5 @@ class Population(object):
         self.cull_species()
 
         self.rank()
+
+        self.remove_stagnating_species()

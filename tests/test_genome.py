@@ -86,3 +86,11 @@ def test_compatible_diff_struct():
     g2.mutate_neuron(innovations)
 
     assert not g1.compatible(conf, g2)
+
+def test_genesis():
+    genome = Genome.minimal_fully_connected(0, (3, 2))
+
+    net = genome.genesis()
+
+    assert net
+    assert net.dim == [3, 0, 2]

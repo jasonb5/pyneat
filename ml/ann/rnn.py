@@ -22,7 +22,7 @@ class RecurrentNeuralNetwork(object):
         self.act_func = None
 
         if act_func:
-            self.act_func = np.vectorize(act_func, float)
+            self.act_func = np.vectorize(act_func)
 
     def __input(self, node):
         return node >= 0 and node < self.dim[0]

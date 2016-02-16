@@ -1,6 +1,8 @@
 from . import Gene
+from ml.ann import RecurrentNeuralNetwork as RNN
 
 import copy
+import math
 import random
 
 class Genome(object):
@@ -58,6 +60,35 @@ class Genome(object):
         genome.genome_id = genome_id
 
         return genome
+
+    def genesis(self):
+        """Generates phenotype from genotype.
+
+        Creates neural network describe by the genotype.
+        """
+        neurons = {}
+
+        # Create dictionary using neuron ids for easy conversion from
+        # relative indexes to absolute indexes, e.g. neurons ids 
+        # (0, 1, 2, 3, 1000, 1001) map to (0, 1, 2, 3, 4, 5).
+        for g in self.genes:
+            if not g.inode in neurons:
+                neurons[g.inode] = True
+
+            if not g.onode in neurons:
+                neurons[g.onode] = True
+
+        sneurons = sorted(neurons.keys())
+        
+        net = RNN(self.neurons, lambda x: 1/(1+math.exp(-x)))
+
+        for g in self.genes:
+            inode = sneurons.index(g.inode)
+            onode = sneurons.index(g.onode)
+
+            net.add_link(inode, onode, random.random()*4.0-2.0)
+
+        return net
 
     def random_neuron(self, allow_input=True):
         """Chooses random neuron.

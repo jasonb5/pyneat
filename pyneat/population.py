@@ -1,3 +1,5 @@
+from . import Species
+
 class Population(object):
     """Population of organisms.
 
@@ -10,6 +12,7 @@ class Population(object):
     def __init__(self, conf):
         self.conf = conf
         self.organisms = []
+        self.species = []
 
     def spawn(self, genome):
         """Spawns initial population
@@ -25,4 +28,28 @@ class Population(object):
         for x in xrange(self.conf.pop_size):
             new_genome = genome.duplicate(x)
 
+            new_genome.mutate_weights()
+
+            self.speciate(new_genome)
+
             self.organisms.append(new_genome)
+
+    def speciate(self, organism):
+        """Speciate organism.
+
+        Search for a compatible species otherwise create a new one.
+
+        Args:
+            organism: Organism to be speciated.
+        """
+        for s in self.species:
+            if s.organisms[0].compatible(self.conf, organism):
+                s.organisms.append(organism)
+
+                return
+
+        species = Species()
+
+        species.organisms.append(organism)
+
+        self.species.append(species)

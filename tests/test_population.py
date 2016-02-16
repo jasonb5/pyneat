@@ -12,3 +12,4 @@ def test_population():
     pop.spawn(genome)
 
     assert len(pop.organisms) == conf.pop_size
+    assert len(pop.species) == 1

@@ -1,5 +1,7 @@
 from . import Species
 
+import math
+
 class Population(object):
     """Population of organisms.
 
@@ -53,3 +55,37 @@ class Population(object):
         species.organisms.append(organism)
 
         self.species.append(species)
+
+    def cull_species(self):
+        """Culling the species.
+
+        Order the organisms by fitness then trim the lower performing.
+        Allowing only the top performing to repopulate the next generation.
+        """
+        for s in self.species:
+            s.organisms.sort(cmp=lambda x, y: cmp(x.fitness, y.fitness),
+                    reverse=True)
+
+            survivors = int(math.floor(len(s.organisms)*self.conf.survival_rate))
+
+            del s.organisms[survivors:]
+
+    def epoch(self, generation):
+        """Populations epoch.
+
+        The beginning of a new generation. First the low performing organisms
+        should be removed. Next the organisms are ranked for the selection. 
+        Each species needs to update its age since last improvements so 
+        stagnating species can be removed. Species will also need to be
+        assigned how many offspring they will contribute to the next 
+        generation, if none they will be removed. The top performing from each
+        species will automatically move to the next generation. Next 
+        reproduction takes place, if there's a gap between the total 
+        reproduced and population size, random species will be selected to 
+        fill in the gap. All the new organisms need to be speciated and the 
+        populations epoch is done.
+
+        Args:
+            generation: Current generation.
+        """
+        self.cull_species()

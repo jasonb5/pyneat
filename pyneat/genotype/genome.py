@@ -24,6 +24,7 @@ class Genome(object):
         self.genome_id = genome_id
         self.neurons = neurons
         self.genes = genes
+        self.fitness = 0.0
 
     @classmethod
     def minimal_fully_connected(cls, genome_id, neurons):

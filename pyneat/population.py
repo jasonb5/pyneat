@@ -75,6 +75,22 @@ class Population(object):
 
             del s.organisms[survivors:]
 
+    def rank(self):
+        """Ranks organisms globally.
+
+        Builds temporary list of potential parents then ranks them globally
+        where the least fit receive a smaller rank than the most fit.
+        """
+        parents = []
+
+        for s in self.species:
+            parents += s.organisms
+
+        parents.sort(cmp=lambda x, y: cmp(x.fitness, y.fitness))
+
+        for p in xrange(len(parents)):
+            parents[p].rank = p+1
+
     def epoch(self, generation):
         """Populations epoch.
 
@@ -94,3 +110,5 @@ class Population(object):
             generation: Current generation.
         """
         self.cull_species()
+
+        self.rank()

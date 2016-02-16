@@ -166,3 +166,38 @@ class Genome(object):
         self.neurons[1] += 1
         self.genes.append(g1)
         self.genes.append(g2)
+
+    def compatible(self, conf, genome):
+        """Tests if two genomes are compatible.
+
+        Compatibility is calculated from the weighted number of disjoint 
+        genes, and the weighted total average of the weight differences.
+        To be compatible this must all be less than some threshold.
+
+        Args:
+            conf: Conf instance.
+            genome: Genome we're testing against
+        """
+        g1 = dict(map(lambda x: (x.innov, x), self.genes))
+        g2 = dict(map(lambda x: (x.innov, x), genome.genes))
+
+        g1_disjoint = filter(lambda x: not x in g2, g1)
+        g2_disjoint = filter(lambda x: not x in g1, g2)
+
+        total_disjoint = len(g1_disjoint)+len(g2_disjoint)
+
+        matching = filter(lambda x: x in g1, g2)
+
+        total_avg = 0.0
+
+        for innov in matching:
+            total_avg += g1[innov].weight-g2[innov].weight
+
+        total_avg /= float(len(matching))
+
+        compat = (total_disjoint*conf.coef_disjoint+
+                total_avg*conf.coef_matching)
+
+        return compat < conf.compat_threshold
+
+

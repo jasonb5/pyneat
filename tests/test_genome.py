@@ -1,3 +1,4 @@
+from pyneat import Conf
 from pyneat import Innovations
 from pyneat.genotype import Genome
 
@@ -60,3 +61,28 @@ def test_mutate_neuron():
     assert len(genome.genes) == 8
     assert sum(genome.neurons) == 6
     assert len(innovations.neuron_innov) == 1
+
+def test_compatible():
+    conf = Conf()
+
+    g1 = Genome.minimal_fully_connected(0, (3, 2))
+
+    g2 = g1.duplicate(1)
+
+    g2.mutate_weights()
+
+    assert g1.compatible(conf, g2)
+
+def test_compatible_diff_struct():
+    conf = Conf()
+    innovations = Innovations()
+
+    g1 = Genome.minimal_fully_connected(0, (3, 2))
+
+    innovations.innov = max(map(lambda x: x.innov, g1.genes))
+
+    g2 = g1.duplicate(1)
+
+    g2.mutate_neuron(innovations)
+
+    assert not g1.compatible(conf, g2)

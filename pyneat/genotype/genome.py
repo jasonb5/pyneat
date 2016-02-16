@@ -90,11 +90,12 @@ class Genome(object):
         Mutates a genome by adding a link between two random neurons. The 
         process of adding a link:
         
-        1. Check if link already exists, exit if so.
-        2. Check if innovation already exists.
-            2.a If the innovation exists, recreate the gene from stored
+        1. Select two random neurons
+        2. Check if link already exists, exit if so.
+        3. Check if innovation already exists.
+            3.a If the innovation exists, recreate the gene from stored
                 information.
-            2.b If the innovation doesn't exist, create the new gene and 
+            3.b If the innovation doesn't exist, create the new gene and 
                 record the innovation.
 
         Args:
@@ -106,10 +107,10 @@ class Genome(object):
         check = map(lambda x: x.inode == n1 and x.onode == n2, self.genes)
 
         if not any(check):
-            innov_id = innovations.check_gene(n1, n2)
+            innov = innovations.check_gene(n1, n2)
 
-            if innov_id:
-                gene = innovations.create_gene_from_innov(innov_id)
+            if innov:
+                gene = innovations.create_gene_from_innov(innov)
             else:
                 gene = Gene(n1, n2, 
                         random.random()*4.0-2.0, innovations.next_innov())
@@ -117,3 +118,45 @@ class Genome(object):
                 innovations.create_gene_innov(gene)
 
             self.genes.append(gene)
+
+    def mutate_neuron(self, innovations):
+        """Mutation by adding neuron.
+
+        Mutates genome by adding replacing a gene with a neuron and two
+        new genes. The process of adding a neuron:
+
+        1. Select a random link.
+        2. Check if links disabled, if so exit otherwise disable.
+        3. Check if innovation already exists.
+            3.a If the innovation exists, recreate the neuron and two genes 
+                from stored information.
+            3.b If the innovation doesn't exist, create the neuron and two
+                genes then record the innovation.
+
+        Args:
+            innovations: Instance of Innocations class.
+        """
+        g = random.choice(self.genes)
+
+        if not g.enabled:
+            return
+
+        g.enabled = False
+
+        innov = innovations.check_neuron(
+                g.inode, g.onode, g.innov)
+
+        if innov:
+            g1, g2 = innovations.create_neuron_from_innov(innov)
+        else:
+            neuron = sum(self.neurons[:2])
+
+            g1 = Gene(g.inode, neuron, 1.0, innovations.next_innov())
+
+            g2 = Gene(neuron, g.onode, g.weight, innovations.next_innov())
+
+            innovations.create_neuron_innov(g, g1, g2, neuron)
+
+        self.neurons[1] += 1
+        self.genes.append(g1)
+        self.genes.append(g2)

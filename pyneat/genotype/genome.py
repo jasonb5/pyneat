@@ -61,6 +61,61 @@ class Genome(object):
 
         return genome
 
+    def crossover(self, dad, mom_fitness, dad_fitness, innovs):
+        """Crossover between two genomes.
+
+        To perform crossover the best performing genome is set to g1 and the
+        other to g2. For matching genes there is a 50/50 chance to inherit
+        from either parent. Disjoint genes are inheritted from the fitess
+        parent by default. Finally the neuron structure is determined and
+        the new baby is returned.
+
+        Args:
+            dad = Dad genome.
+            mom_fitness = Mothers fitness.
+            dad_fitness = Dad fitness.
+            innovs = Instance of Innovations class
+
+        Returns: New baby genome.
+        """
+        mom_genes = dict(map(lambda x: (x.innov, x), self.genes))
+        dad_genes = dict(map(lambda x: (x.innov, x), dad.genes))
+
+        if mom_fitness > dad_fitness:
+            g1 = mom_genes
+            g2 = dad_genes
+        else:
+            g1 = dad_genes
+            g2 = mom_genes
+
+        baby_genes = []
+
+        for innov, gene in g1.items():
+            if (innov in g2 and g2[innov].enabled and random.random() < 0.5):
+                baby_genes.append(copy.deepcopy(g2[innov]))
+            else:
+                baby_genes.append(copy.deepcopy(g1[innov]))
+
+        neurons = {}
+
+        for g in baby_genes:
+            if not g.inode in neurons:
+                neurons[g.inode] = True
+            
+            if not g.onode in neurons:
+                neurons[g.onode] = True
+
+        inodes = filter(lambda x: x < self.neurons[0], neurons.keys())
+        hnodes = filter(lambda x: (x >= self.neurons[0] and
+            x < Genome.MAX_HIDDEN), neurons.keys())
+        onodes = filter(lambda x: x >= Genome.MAX_HIDDEN, neurons.keys())
+
+        baby = Genome(innovs.next_genome(), 
+                (len(inodes), len(hnodes), len(onodes)),
+                baby_genes)
+
+        return baby
+
     def genesis(self):
         """Generates phenotype from genotype.
 

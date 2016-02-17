@@ -11,6 +11,88 @@ def test_genome():
     assert genome.neurons == [3, 0, 2]
     assert len(genome.genes) == 6
 
+def test_crossover_equal_mom_fit():
+    innovs = Innovations()
+
+    mom = Genome.minimal_fully_connected(0, (3, 2))
+
+    dad = mom.duplicate(1)
+
+    baby = mom.crossover(dad, 2.0, 1.0, innovs)
+
+    assert len(baby.genes) == 6
+
+def test_crossover_equal_dad_fit():
+    innovs = Innovations()
+
+    mom = Genome.minimal_fully_connected(0, (3, 2))
+
+    dad = mom.duplicate(1)
+
+    baby = mom.crossover(dad, 1.0, 2.0, innovs)
+
+    assert len(baby.genes) == 6
+
+def test_crossover_unequal_mom_mut_dad_fit():
+    innovs = Innovations()
+
+    mom = Genome.minimal_fully_connected(0, (3, 2))
+
+    innovs.innov = max(map(lambda x: x.innov, mom.genes))
+
+    dad = mom.duplicate(1)
+
+    mom.mutate_neuron(innovs)
+
+    baby = mom.crossover(dad, 2.0, 1.0, innovs)
+
+    assert len(baby.genes) == 8
+
+def test_crossover_unequal_mom_mut_mom_fit():
+    innovs = Innovations()
+
+    mom = Genome.minimal_fully_connected(0, (3, 2))
+
+    innovs.innov = max(map(lambda x: x.innov, mom.genes))
+
+    dad = mom.duplicate(1)
+
+    mom.mutate_neuron(innovs)
+
+    baby = mom.crossover(dad, 1.0, 2.0, innovs)
+
+    assert len(baby.genes) == 6
+
+def test_crossover_unequal_dad_mut_dad_fit():
+    innovs = Innovations()
+
+    mom = Genome.minimal_fully_connected(0, (3, 2))
+
+    innovs.innov = max(map(lambda x: x.innov, mom.genes))
+
+    dad = mom.duplicate(1)
+
+    dad.mutate_neuron(innovs)
+
+    baby = mom.crossover(dad, 1.0, 2.0, innovs)
+
+    assert len(baby.genes) == 8
+
+def test_crossover_unequal_dad_mut_mom_fit():
+    innovs = Innovations()
+
+    mom = Genome.minimal_fully_connected(0, (3, 2))
+
+    innovs.innov = max(map(lambda x: x.innov, mom.genes))
+
+    dad = mom.duplicate(1)
+
+    dad.mutate_neuron(innovs)
+
+    baby = mom.crossover(dad, 2.0, 1.0, innovs)
+
+    assert len(baby.genes) == 6
+
 def test_mutate_gene():
     genome = Genome.minimal_fully_connected(0, (3, 2))
 

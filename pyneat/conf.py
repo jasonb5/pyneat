@@ -6,3 +6,7 @@ class Conf(object):
         self.compat_threshold = 2.0
         self.survival_rate = 0.8
         self.stagnation_threshold = 15
+        self.mate_only_prob = 0.2
+        self.mutate_only_prob = 0.25
+        self.mutate_neuron_prob = 0.03
+        self.mutate_gene_prob = 0.05

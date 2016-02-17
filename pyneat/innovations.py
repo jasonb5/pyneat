@@ -11,6 +11,14 @@ class Innovations(object):
         self.gene_innov = []
         self.innov = 0
         self.neuron = 0
+        self.genome = 0
+
+    def next_genome(self):
+        next_id = self.genome
+
+        self.genome += 1
+
+        return next_id
 
     def next_innov(self):
         self.innov += 1

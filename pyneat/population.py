@@ -1,5 +1,6 @@
 from . import Species
 from . import Organism
+from . import Innovations
 
 import math
 
@@ -16,6 +17,7 @@ class Population(object):
         self.conf = conf
         self.organisms = []
         self.species = []
+        self.innovs = Innovations()
 
     def spawn(self, genome):
         """Spawns initial population
@@ -170,3 +172,17 @@ class Population(object):
         self.remove_stagnating_species()
 
         self.remove_weak_species()
+
+        children = []
+
+        for s in self.species:
+            children += s.epoch(self.conf, self.innovs)
+
+            del s.organisms[1:]
+
+        for c in children:
+            self.speciate(c)
+
+        del self.organisms[:]
+
+        self.organisms = sum(map(lambda x: x.organisms, self.species), [])

@@ -111,7 +111,7 @@ class Genome(object):
         onodes = filter(lambda x: x >= Genome.MAX_HIDDEN, neurons.keys())
 
         baby = Genome(innovs.next_genome(), 
-                (len(inodes), len(hnodes), len(onodes)),
+                [len(inodes), len(hnodes), len(onodes)],
                 baby_genes)
 
         return baby

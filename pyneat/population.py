@@ -3,7 +3,7 @@ from . import Organism
 from . import Innovations
 
 import math
-import logging as log
+import logging
 
 class Population(object):
     """Population of organisms.
@@ -19,6 +19,7 @@ class Population(object):
         self.organisms = []
         self.species = []
         self.innovs = Innovations()
+        self.log = logging.getLogger('population')
 
     def spawn(self, genome):
         """Spawns initial population
@@ -29,6 +30,8 @@ class Population(object):
         Args:
             genome: initial genome of the population
         """
+        self.log.info('spawning %d organisms', self.conf.pop_size)
+
         for x in xrange(self.conf.pop_size):
             new_genome = genome.duplicate(x)
 
@@ -56,11 +59,13 @@ class Population(object):
 
                 return
 
-        species = Species()
+        species = Species(self.innovs.next_species())
 
         species.organisms.append(organism)
 
         self.species.append(species)
+
+        self.log.info('creating new species %d', species.species_id)
 
     def cull_species(self):
         """Culling the species.
@@ -69,12 +74,19 @@ class Population(object):
         Allowing only the top performing to repopulate the next generation.
         """
         for s in self.species:
+            organism_cnt = len(s.organisms)
+
             s.organisms.sort(cmp=lambda x, y: cmp(x.fitness, y.fitness),
                     reverse=True)
 
-            survivors = int(math.floor(len(s.organisms)*self.conf.survival_rate))
+            survivors = int(math.floor(organism_cnt*self.conf.survival_rate))
 
             del s.organisms[survivors:]
+
+            self.log.info('culled species %d from %d to %d',
+                    s.species_id,
+                    organism_cnt,
+                    len(s.organisms))
 
     def rank(self):
         """Ranks organisms globally.
@@ -116,6 +128,10 @@ class Population(object):
 
             if s.age_since_imp < self.conf.stagnation_threshold:
                 survivors.append(s)
+            else:
+                self.log.info('removing species %d, %d days since improvement',
+                        s.species_id,
+                        s.age_since_imp)
 
         self.species = survivors
 
@@ -143,6 +159,9 @@ class Population(object):
 
             if s.offspring > 0:
                 survivors.append(s)
+            else:
+                self.log.info('removing species %d, not fit enough',
+                        s.species_id)
 
         self.species = survivors
 

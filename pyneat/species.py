@@ -12,7 +12,8 @@ class Species(object):
     eachother rather than competing with organisms of differing structures. 
     This helps keep the population diverse as well.
     """
-    def __init__(self):
+    def __init__(self, species_id):
+        self.species_id = species_id
         self.organisms = []
         self.max_fitness = 0
         self.avg_fitness = 0

@@ -137,11 +137,12 @@ class Genome(object):
         
         net = RNN(self.neurons, lambda x: 1/(1+math.exp(-x)))
 
+        # Add links usin existing weight value
         for g in self.genes:
             inode = sneurons.index(g.inode)
             onode = sneurons.index(g.onode)
 
-            net.add_link(inode, onode, random.random()*4.0-2.0)
+            net.add_link(inode, onode, g.weight)
 
         return net
 

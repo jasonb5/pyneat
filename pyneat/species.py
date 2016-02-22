@@ -49,7 +49,8 @@ class Species(object):
 
         pool = zip(shift_probs, self.organisms)
 
-        for x in xrange(self.offspring):
+        # Produce one less than offspring since the most fit will be passed on
+        for x in xrange(self.offspring-1):
             if random.random() < conf.mutate_only_prob:
                 the_org = self.random_org(pool)
 
@@ -66,7 +67,9 @@ class Species(object):
                             baby_genome.genome_id,
                             the_org.genome.genome_id)
 
-                    baby_genome.mutate_gene(innovs)
+                    if not baby_genome.mutate_gene(innovs):
+                        self.log.error('genome %d gene mutation failed',
+                                baby_genome.genome_id)
                 else:
                     self.log.info('genome %d parent %d mutate weights',
                             baby_genome.genome_id,
@@ -102,7 +105,9 @@ class Species(object):
                         self.log.info('genome %d mutate gene after mate',
                                 baby_genome.genome_id)
 
-                        baby_genome.mutate_gene(innovs)
+                        if not baby_genome.mutate_gene(innovs):
+                            self.log.error('genome %d gene mutation failed',
+                                    baby_genome.genome_id)
                     else:
                         self.log.info('genome %d mutate weights after mate',
                                 baby_genome.genome_id)

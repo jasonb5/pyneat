@@ -197,6 +197,9 @@ class Genome(object):
         n1 = self.random_neuron()
         n2 = self.random_neuron(False)
 
+        if n1 == n2 and n1 >= Genome.MAX_HIDDEN:
+            return False
+
         check = map(lambda x: x.inode == n1 and x.onode == n2, self.genes)
 
         if not any(check):
@@ -211,6 +214,8 @@ class Genome(object):
                 innovations.create_gene_innov(gene)
 
             self.genes.append(gene)
+
+        return True
 
     def mutate_neuron(self, innovations):
         """Mutation by adding neuron.

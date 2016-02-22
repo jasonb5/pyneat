@@ -68,7 +68,7 @@ class RecurrentNeuralNetwork(object):
         elif self.__output(inode) and self.__hidden(onode):
             self.wb[self.__hnode(onode), self.__onode(inode)] =  weight
         else:
-            self.log.error('Cannog create link from %d to %d',
+            self.log.error('Cannot create link from %d to %d',
                     inode, onode)
 
             return False

@@ -29,9 +29,11 @@ class Innovations(object):
         return next_id
 
     def next_innov(self):
+        next_id = self.innov
+
         self.innov += 1
 
-        return self.innov
+        return next_id
 
     def check_gene(self, inode, onode):
         """Check if gene mutation exists.

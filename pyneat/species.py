@@ -1,6 +1,7 @@
 from . import Organism
 
 import random
+import logging
 
 class Species(object):
     """Species of organisms.
@@ -19,6 +20,7 @@ class Species(object):
         self.avg_fitness = 0
         self.age_since_imp = 0
         self.offspring = 0
+        self.log = logging.getLogger('species')
 
     def epoch(self, conf, innovs):
         """Species epoch.
@@ -54,10 +56,22 @@ class Species(object):
                 baby_genome = the_org.genome.duplicate(innovs.next_genome())
 
                 if random.random() < conf.mutate_neuron_prob:
+                    self.log.info('genome %d parent %d mutate neuron',
+                            baby_genome.genome_id,
+                            the_org.genome.genome_id)
+
                     baby_genome.mutate_neuron(innovs)
                 elif random.random() < conf.mutate_gene_prob:
+                    self.log.info('genome %d parent %d mutate gene',
+                            baby_genome.genome_id,
+                            the_org.genome.genome_id)
+
                     baby_genome.mutate_gene(innovs)
                 else:
+                    self.log.info('genome %d parent %d mutate weights',
+                            baby_genome.genome_id,
+                            the_org.genome.genome_id)
+
                     baby_genome.mutate_weights()
             else:
                 mom = self.random_org(pool)
@@ -69,12 +83,26 @@ class Species(object):
                         dad.fitness,
                         innovs)
 
+                self.log.info('genome %d mom %d dad %d',
+                        baby_genome.genome_id,
+                        mom.genome.genome_id,
+                        dad.genome.genome_id)
+
                 if random.random() > conf.mate_only_prob:
                     if random.random() < conf.mutate_neuron_prob:
+                        self.log.info('genome %d mutate neuron after mate',
+                                baby_genome.genome_id)
+                        
                         baby_genome.mutate_neuron(innovs)
                     elif random.random() < conf.mutate_gene_prob:
+                        self.log.info('genome %d mutate gene after mate',
+                                baby_genome.genome_id)
+
                         baby_genome.mutate_gene(innovs)
                     else:
+                        self.log.info('genome %d mutate weights after mate',
+                                baby_genome.genome_id)
+
                         baby_genome.mutate_weights()
 
             children.append(Organism(baby_genome))

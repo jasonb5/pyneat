@@ -44,6 +44,10 @@ class Population(object):
 
             self.organisms.append(org)
 
+        # Initialize innovation
+        self.innovs.innov = len(genome.genes)
+        self.innovs.genome = len(self.organisms)        
+
     def speciate(self, organism):
         """Speciate organism.
 
@@ -201,6 +205,9 @@ class Population(object):
 
         for s in self.species:
             children += s.epoch(self.conf, self.innovs)
+
+            s.organisms.sort(cmp=lambda x, y: cmp(x.fitness, y.fitness),
+                    reverse=True)
 
             del s.organisms[1:]
 

@@ -24,6 +24,8 @@ class RecurrentNeuralNetwork(object):
         if act_func:
             self.act_func = np.vectorize(act_func)
 
+        self.log = logging.getLogger('rnn')
+
     def __input(self, node):
         return node >= 0 and node < self.dim[0]
 
@@ -66,7 +68,8 @@ class RecurrentNeuralNetwork(object):
         elif self.__output(inode) and self.__hidden(onode):
             self.wb[self.__hnode(onode), self.__onode(inode)] =  weight
         else:
-            logging.error('Cannot add link from {0} to {1}', inode, onode)
+            self.log.error('Cannog create link from %d to %d',
+                    inode, onode)
 
             return False
 

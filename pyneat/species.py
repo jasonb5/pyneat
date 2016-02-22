@@ -88,7 +88,11 @@ class Species(object):
                         mom.genome.genome_id,
                         dad.genome.genome_id)
 
-                if random.random() > conf.mate_only_prob:
+                # Force mutation after mating if the parents are the same
+                # genome or if they're compatible.
+                if (mom.genome.genome_id == dad.genome.genome_id or
+                        mom.genome.compatible(conf, dad.genome) or
+                        random.random() > conf.mate_only_prob):
                     if random.random() < conf.mutate_neuron_prob:
                         self.log.info('genome %d mutate neuron after mate',
                                 baby_genome.genome_id)

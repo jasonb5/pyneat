@@ -79,7 +79,9 @@ class Population(object):
             s.organisms.sort(cmp=lambda x, y: cmp(x.fitness, y.fitness),
                     reverse=True)
 
-            survivors = int(math.floor(organism_cnt*self.conf.survival_rate))
+            # Since we take the floor we add one so there's atleast one 
+            # survivor.
+            survivors = int(math.floor(organism_cnt*self.conf.survival_rate))+1
 
             del s.organisms[survivors:]
 

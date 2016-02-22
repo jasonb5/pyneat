@@ -18,6 +18,7 @@ class Population(object):
         self.conf = conf
         self.organisms = []
         self.species = []
+        self.generation = 0
         self.innovs = Innovations()
         self.log = logging.getLogger('population')
 
@@ -85,7 +86,8 @@ class Population(object):
 
             del s.organisms[survivors:]
 
-            self.log.info('culled species %d from %d to %d',
+            self.log.info('gen %d culled species %d from %d to %d',
+                    self.generation,
                     s.species_id,
                     organism_cnt,
                     len(s.organisms))
@@ -131,7 +133,8 @@ class Population(object):
             if s.age_since_imp < self.conf.stagnation_threshold:
                 survivors.append(s)
             else:
-                self.log.info('removing species %d, %d days since improvement',
+                self.log.info('gen %d removing species %d, %d days since improvement',
+                        self.generation,
                         s.species_id,
                         s.age_since_imp)
 
@@ -162,12 +165,13 @@ class Population(object):
             if s.offspring > 0:
                 survivors.append(s)
             else:
-                self.log.info('removing species %d, not fit enough',
+                self.log.info('gen %d removing species %d, not fit enough',
+                        self.generation,
                         s.species_id)
 
         self.species = survivors
 
-    def epoch(self, generation):
+    def epoch(self):
         """Populations epoch.
 
         The beginning of a new generation. First the low performing organisms
@@ -206,3 +210,5 @@ class Population(object):
         del self.organisms[:]
 
         self.organisms = sum(map(lambda x: x.organisms, self.species), [])
+
+        self.generation += 1

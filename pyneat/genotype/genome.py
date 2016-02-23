@@ -135,7 +135,7 @@ class Genome(object):
 
         sneurons = sorted(neurons.keys())
         
-        net = RNN(self.neurons, lambda x: 1/(1+math.exp(-x)))
+        net = RNN(self.neurons, lambda x: 1/(1+math.exp(-4.9*x)))
 
         # Add links usin existing weight value
         for g in self.genes:
@@ -197,8 +197,9 @@ class Genome(object):
         n1 = self.random_neuron()
         n2 = self.random_neuron(False)
 
-        if n1 == n2 and n1 >= Genome.MAX_HIDDEN:
-            return False
+        if n1 == n2:
+            if n1 >= Genome.MAX_HIDDEN or n1 < self.neurons[0]:
+                return False
 
         check = map(lambda x: x.inode == n1 and x.onode == n2, self.genes)
 

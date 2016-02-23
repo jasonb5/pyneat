@@ -22,7 +22,7 @@ class Species(object):
         self.offspring = 0
         self.log = logging.getLogger('species')
 
-    def epoch(self, conf, innovs):
+    def epoch(self, conf, innovs, num=None):
         """Species epoch.
 
         During species epoch the next generations children are created.
@@ -49,8 +49,10 @@ class Species(object):
 
         pool = zip(shift_probs, self.organisms)
 
+        offspring = num if num else self.offspring-1
+
         # Produce one less than offspring since the most fit will be passed on
-        for x in xrange(self.offspring-1):
+        for x in xrange(offspring):
             if random.random() < conf.mutate_only_prob:
                 the_org = self.random_org(pool)
 

@@ -3,6 +3,7 @@ from . import Organism
 from . import Innovations
 
 import math
+import random
 import logging
 
 class Population(object):
@@ -164,7 +165,7 @@ class Population(object):
 
         for s in self.species:
             s.offspring = int(math.floor(
-                    (s.avg_fitness*self.conf.pop_size/total_avg_fitness)))
+                    (s.avg_fitness*(self.conf.pop_size-len(self.species))/total_avg_fitness)))+1
 
             if s.offspring > 0:
                 survivors.append(s)
@@ -195,9 +196,9 @@ class Population(object):
         """
         self.cull_species()
 
-        self.rank()
-
         self.remove_stagnating_species()
+
+        self.rank()
 
         self.remove_weak_species()
 
@@ -210,6 +211,13 @@ class Population(object):
                     reverse=True)
 
             del s.organisms[1:]
+
+        while len(children)+len(self.species) < self.conf.pop_size:
+            s = random.choice(self.species)
+
+            children += s.epoch(self.conf, self.innovs, num=1)
+
+        self.log.error('children %d of %d', len(children)+len(self.species), self.conf.pop_size)
 
         for c in children:
             self.speciate(c)

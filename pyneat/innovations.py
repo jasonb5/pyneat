@@ -69,7 +69,7 @@ class Innovations(object):
         return Gene(
                 innov['inode'], 
                 innov['onode'], 
-                innov['weight']. 
+                innov['weight'], 
                 innov['innov'])
 
     def create_neuron_from_innov(self, innov):

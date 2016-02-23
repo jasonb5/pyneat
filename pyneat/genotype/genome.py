@@ -171,11 +171,51 @@ class Genome(object):
 
         return random.choice(pool.keys())
 
-    def mutate_weights(self):
+    def mutate_weights(self, power, rate, mut=0):
         """Mutates all gene weights
         """
+        #for g in self.genes:
+        #    g.weight += random.random()*4.0-2.0
+
+        if random.random() > 0.5:
+            severe = True
+        else:
+            severe = False
+
+        number = 0
+        gene_total = len(self.genes)
+        end_part = int(math.floor(gene_total*0.8))
+        power_mod = 1.0
+
         for g in self.genes:
-            g.weight = random.random()*4.0-2.0
+            if severe:
+                gp = 0.3
+                cgp = 0.1
+            elif gene_total >= 10 and number > end_part:
+                gp = 0.5
+                cgp = 0.3
+            else:
+                if random.random() > 0.5:
+                    gp = 1.0 - rate
+                    cgp = 1.0 - rate - 0.1
+                else:
+                    gp = 1.0 - rate
+                    cgp = 1.0 - rate
+
+            rand = 1.0 if random.random() >= 0.5 else -1
+            rand *= random.random()*power*power_mod
+
+            if not mut:
+                choice = random.random()
+                if choice > gp:
+                    g.weight += rand
+                elif choice > cgp:
+                    g.weight = rand
+            else:
+                g.weight = rand
+
+            number += 1
+
 
     def mutate_gene(self, innovations):
         """Mutation by adding link.

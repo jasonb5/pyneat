@@ -10,3 +10,4 @@ class Conf(object):
         self.mutate_only_prob = 0.25
         self.mutate_neuron_prob = 0.03
         self.mutate_gene_prob = 0.05
+        self.mutate_power = 2.5

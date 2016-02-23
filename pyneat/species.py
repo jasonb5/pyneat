@@ -77,7 +77,7 @@ class Species(object):
                             baby_genome.genome_id,
                             the_org.genome.genome_id)
 
-                    baby_genome.mutate_weights()
+                    baby_genome.mutate_weights(conf.mutate_power, 1.0)
             else:
                 mom = self.random_org(pool)
                 dad = self.random_org(pool)
@@ -114,7 +114,7 @@ class Species(object):
                         self.log.info('genome %d mutate weights after mate',
                                 baby_genome.genome_id)
 
-                        baby_genome.mutate_weights()
+                        baby_genome.mutate_weights(conf.mutate_power, 1.0)
 
             children.append(Organism(baby_genome))
 

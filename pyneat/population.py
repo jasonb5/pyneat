@@ -217,8 +217,6 @@ class Population(object):
 
             children += s.epoch(self.conf, self.innovs, num=1)
 
-        self.log.error('children %d of %d', len(children)+len(self.species), self.conf.pop_size)
-
         for c in children:
             self.speciate(c)
 

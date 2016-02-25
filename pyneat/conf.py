@@ -1,5 +1,6 @@
 class Conf(object):
     def __init__(self):
+        self.generations = 100
         self.pop_size = 150
         self.coef_matching = 0.4
         self.coef_disjoint = 2.0

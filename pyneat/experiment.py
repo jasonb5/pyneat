@@ -44,7 +44,7 @@ class Experiment(object):
         self.name = name
         self.log = logging.getLogger('experiment')
 
-    def run(self, num_input, num_output, conf, data, fitness_func, runs=1):
+    def run(self, conf):
         """Runs experiment.
 
         Creates a population where each organism evaluates the given data.
@@ -61,13 +61,14 @@ class Experiment(object):
             fitness_func: Fitness method. See class description.
             runs: Number of runs to perform. Defautlts to 1.
         """
-        genome = Genome.minimal_fully_connected(0, (num_input, num_output))
+        genome = Genome.minimal_fully_connected(0, 
+                (conf.num_input, conf.num_output))
 
         ns = {'math': math}
 
-        exec fitness_func in ns
+        exec conf.fitness_func in ns
 
-        for r in xrange(runs):
+        for r in xrange(conf.runs):
             pop = Population(conf)
 
             pop.spawn(genome)
@@ -80,7 +81,7 @@ class Experiment(object):
 
                     res = []
 
-                    for d in data:
+                    for d in conf.data:
                         res.append(net.activate(d))
 
                     o.fitness, winner = ns['evaluate'](res)

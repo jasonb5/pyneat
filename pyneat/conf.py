@@ -1,3 +1,5 @@
+import jsonpickle
+
 class Conf(object):
     def __init__(self):
         self.generations = 100
@@ -12,3 +14,15 @@ class Conf(object):
         self.mutate_neuron_prob = 0.03
         self.mutate_gene_prob = 0.05
         self.mutate_power = 2.5
+        self.fitness_func = None
+        self.num_input = 3
+        self.num_output = 1
+        self.data = None
+        self.runs = 1
+
+    @classmethod
+    def from_json(cls, json):
+        return jsonpickle.decode(json)
+
+    def to_json(self):
+        return jsonpickle.encode(self)

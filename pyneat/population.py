@@ -89,7 +89,7 @@ class Population(object):
             # survivor.
             survivors = int(math.floor(organism_cnt*self.conf.survival_rate))+1
 
-            del s.organisms[survivors:]
+            map(lambda x: x.marked_death(), s.organisms[survivors:])
 
             self.log.info('gen %d culled species %d from %d to %d',
                     self.generation,
@@ -119,8 +119,6 @@ class Population(object):
         Updates a species max_fitness, ages the species if no improvement has
         occurred and removes species older than the stagnation threshold.
         """
-        survivors = []
-
         for s in self.species:
             imp = False    
 
@@ -135,15 +133,13 @@ class Population(object):
             if not imp:
                 s.age_since_imp += 1
 
-            if s.age_since_imp < self.conf.stagnation_threshold:
-                survivors.append(s)
-            else:
+            if s.age_since_imp >= self.conf.stagnation_threshold:
+                s.marked = True
+
                 self.log.info('gen %d removing species %d, %d days since improvement',
                         self.generation,
                         s.species_id,
                         s.age_since_imp)
-
-        self.species = survivors
 
     def remove_weak_species(self):
         """Removes weak species.
@@ -161,22 +157,25 @@ class Population(object):
 
             total_avg_fitness += s.avg_fitness
 
-        survivors = []
-
         for s in self.species:
             s.offspring = int(math.floor(
                     (s.avg_fitness*(self.conf.pop_size-len(self.species))/total_avg_fitness)))+1
 
-            if s.offspring > 0:
-                survivors.append(s)
-            else:
+            if s.offspring == 0:
+                s.marked = True
+
                 self.log.info('gen %d removing species %d, not fit enough',
                         self.generation,
                         s.species_id)
 
-        self.species = survivors
+    def remove_marked(self):
+        for s in self.species:
+            if not s.marked:
+                s.organisms = filter(lambda x: not x.marked, s.organisms)
 
-    def epoch(self):
+        self.species = filter(lambda x: not x.marked, self.species)
+
+    def epoch(self, db=None):
         """Populations epoch.
 
         The beginning of a new generation. First the low performing organisms
@@ -201,6 +200,10 @@ class Population(object):
         self.rank()
 
         self.remove_weak_species()
+
+        db.push_generation(self.generation, self.species)
+
+        self.remove_marked()
 
         children = []
 

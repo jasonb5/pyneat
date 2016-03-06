@@ -3,3 +3,7 @@ class Organism(object):
         self.genome = genome
         self.fitness = 0.0
         self.rank = 0
+        self.marked = False
+
+    def marked_death(self):
+        self.marked = True

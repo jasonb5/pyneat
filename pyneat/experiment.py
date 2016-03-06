@@ -44,7 +44,7 @@ class Experiment(object):
         self.name = name
         self.log = logging.getLogger('experiment')
 
-    def run(self, conf):
+    def run(self, conf, db=None):
         """Runs experiment.
 
         Creates a population where each organism evaluates the given data.
@@ -68,7 +68,11 @@ class Experiment(object):
 
         exec conf.fitness_func in ns
 
+        db.push_experiment(self.name, conf)
+
         for r in xrange(conf.runs):
+            db.push_population()
+
             pop = Population(conf)
 
             pop.spawn(genome)
@@ -91,4 +95,4 @@ class Experiment(object):
 
                         return
 
-                pop.epoch()
+                pop.epoch(db)

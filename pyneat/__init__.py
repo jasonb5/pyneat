@@ -1,4 +1,5 @@
 from conf import Conf
+from database import Database
 from innovations import Innovations
 from organism import Organism
 from species import Species

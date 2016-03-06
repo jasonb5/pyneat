@@ -20,6 +20,7 @@ class Species(object):
         self.avg_fitness = 0
         self.age_since_imp = 0
         self.offspring = 0
+        self.marked = False
         self.log = logging.getLogger('species')
 
     def epoch(self, conf, innovs, num=None):

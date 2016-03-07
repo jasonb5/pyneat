@@ -5,6 +5,5 @@ setup(name='pyneat',
         packages=['pyneat'],
         install_requires=[
             'numpy',
-            'jsonpickle',
         ],
         )

@@ -1,4 +1,4 @@
-import jsonpickle
+import json
 
 class Conf(object):
     def __init__(self):
@@ -20,9 +20,5 @@ class Conf(object):
         self.data = None
         self.runs = 1
 
-    @classmethod
-    def from_json(cls, json):
-        return jsonpickle.decode(json)
-
     def to_json(self):
-        return jsonpickle.encode(self)
+        return json.dumps(self.__dict__)

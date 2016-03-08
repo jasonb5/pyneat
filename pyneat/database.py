@@ -1,5 +1,6 @@
 import os 
 import sys
+import json
 import django
 
 sys.path.append('../pyneat-web')
@@ -56,10 +57,30 @@ class Database(object):
             species.save()
 
             for o in s.organisms:
+                network = {}
+                
+                network['input'] = o.genome.neurons[0]
+                network['hidden'] = o.genome.neurons[1]
+                network['output'] = o.genome.neurons[2]
+
+                genes = []
+
+                for g in o.genome.genes:
+                    gene = {}
+                    gene['inode'] = g.inode
+                    gene['onode'] = g.onode
+                    gene['weight'] = g.weight
+                    gene['enabled'] = g.enabled
+
+                    genes.append(gene)
+
+                network['genes'] = genes
+
                 org = models.Organism(
                         rel_index=o.genome.genome_id,
                         winner=o.winner,
                         marked=o.marked,
+                        network=json.dumps(network),
                         fitness=o.fitness,
                         rank=o.rank,
                         species=species,

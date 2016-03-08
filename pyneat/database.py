@@ -26,15 +26,16 @@ class Database(object):
 
         self.exp.save()
 
-    def push_population(self):
+    def push_population(self, rel_index):
         self.pop = models.Population(
+                rel_index=rel_index,
                 experiment=self.exp)
 
         self.pop.save()
 
-    def push_generation(self, relative_index, species):
+    def push_generation(self, rel_index, species):
         self.gen = models.Generation(
-                relative_index=relative_index,
+                rel_index=rel_index,
                 population=self.pop)
 
         self.gen.save()
@@ -43,6 +44,8 @@ class Database(object):
 
         for s in species:
             species = models.Species(
+                    rel_index=s.species_id,
+                    marked=s.marked,
                     avg_fitness=s.avg_fitness,
                     max_fitness=s.max_fitness,
                     offspring=s.offspring,
@@ -54,6 +57,9 @@ class Database(object):
 
             for o in s.organisms:
                 org = models.Organism(
+                        rel_index=o.genome.genome_id,
+                        winner=o.winner,
+                        marked=o.marked,
                         fitness=o.fitness,
                         rank=o.rank,
                         species=species,

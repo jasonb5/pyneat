@@ -71,7 +71,7 @@ class Experiment(object):
         db.push_experiment(self.name, conf)
 
         for r in xrange(conf.runs):
-            db.push_population()
+            db.push_population(r)
 
             pop = Population(conf)
 
@@ -88,7 +88,7 @@ class Experiment(object):
                     for d in conf.data:
                         res.append(net.activate(d))
 
-                    o.fitness, winner = ns['evaluate'](res)
+                    o.fitness, o.winner = ns['evaluate'](res)
 
                     if winner:
                         self.log.info('Winner!!')

@@ -10,22 +10,24 @@ class Experiment(object):
     Executes NEAT on a given set of data and a fitness method.
 
     Fitness method must be a python method named evaluate wrapped in a 
-    string. It will have one parameter that will be a list containing the 
-    output from the neural networks. Each entry will correspond with the 
-    appropriate entry from the data variable passed to the run method.
-    The method will need to return a 2-tuple, containing the fitness value
-    and whether it is a solution, respectfully.
+    string. It will have one parameter that will be the neural network
+    being evaluated. The method will need to return a 2-tuple, containing 
+    the fitness value and whether it is a solution, respectfully.
     
     e.g.
 
-    # Data passed to run method
-    data = ((0.0, 0.0, 1.0),
-            (1.0, 0.0, 1.0),
-            (0.0, 1.0, 1.0),
-            (1.0, 1.0, 1.0))
+    def evaluate(net):
+        # Data passed to run method
+        data = ((0.0, 0.0, 1.0),
+                (1.0, 0.0, 1.0),
+                (0.0, 1.0, 1.0),
+                (1.0, 1.0, 1.0))
 
-    def evaluate(res):
+        res = []
         winner = False
+
+        for d in data:
+            res.append(net.activate(d))
 
         error = math.fabs(res[0]+(1-res[1])+(1-res[2])+res[3])
 
@@ -83,12 +85,7 @@ class Experiment(object):
 
                     net = o.genome.genesis()
 
-                    res = []
-
-                    for d in conf.data:
-                        res.append(net.activate(d))
-
-                    o.fitness, o.winner = ns['evaluate'](res)
+                    o.fitness, o.winner = ns['evaluate'](net)
 
                     if o.winner:
                         self.log.info('Winner!!')

@@ -17,7 +17,6 @@ class Conf(object):
         self.fitness_func = None
         self.num_input = 3
         self.num_output = 1
-        self.data = None
         self.runs = 1
 
     def to_json(self):

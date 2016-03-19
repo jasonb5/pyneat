@@ -90,7 +90,7 @@ class Experiment(object):
 
                     o.fitness, o.winner = ns['evaluate'](res)
 
-                    if winner:
+                    if o.winner:
                         self.log.info('Winner!!')
 
                         return

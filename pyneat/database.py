@@ -14,6 +14,16 @@ django.setup()
 
 from neatweb import models
 
+class DummyDatabase(object):
+    def push_experiment(self, name, conf):
+        pass
+
+    def push_population(self, rel_index):
+        pass
+
+    def push_generation(self, rel_index, species):
+        pass
+
 class Database(object):
     def __init__(self):
         self.exp = None

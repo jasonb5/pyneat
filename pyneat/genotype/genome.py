@@ -216,6 +216,15 @@ class Genome(object):
 
             number += 1
 
+    def is_input(self, neuron):
+        return True if neuron < self.neurons[0] else False
+
+    def is_hidden(self, neuron):
+        return True if (neuron >= self.neurons[0] and
+                neuron > Genome.MAX_HIDDEN) else False
+
+    def is_output(self, neuron):
+        return True if neuron >= Genome.MAX_HIDDEN else False
 
     def mutate_gene(self, innovations):
         """Mutation by adding link.
@@ -237,9 +246,18 @@ class Genome(object):
         n1 = self.random_neuron()
         n2 = self.random_neuron(False)
 
-        if n1 == n2:
-            if n1 >= Genome.MAX_HIDDEN or n1 < self.neurons[0]:
-                return False
+        # Try to fix illegal genes
+        if not (self.is_hidden(n1) and self.is_hidden(n2)):
+            return False
+        elif ((self.is_hidden(n1) or self.is_output(n1)) and
+                self.is_input(n2)):
+            temp = n1
+            n1 = n2
+            n2 = temp
+
+        #if n1 == n2:
+        #    if n1 >= Genome.MAX_HIDDEN or n1 < self.neurons[0]:
+        #        return False
 
         check = map(lambda x: x.inode == n1 and x.onode == n2, self.genes)
 

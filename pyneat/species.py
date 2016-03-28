@@ -70,7 +70,7 @@ class Species(object):
                             baby_genome.genome_id,
                             the_org.genome.genome_id)
 
-                    if not baby_genome.mutate_gene(innovs):
+                    if not baby_genome.mutate_gene(innovs, conf):
                         self.log.error('genome %d gene mutation failed',
                                 baby_genome.genome_id)
                 else:
@@ -108,7 +108,7 @@ class Species(object):
                         self.log.info('genome %d mutate gene after mate',
                                 baby_genome.genome_id)
 
-                        if not baby_genome.mutate_gene(innovs):
+                        if not baby_genome.mutate_gene(innovs, conf):
                             self.log.error('genome %d gene mutation failed',
                                     baby_genome.genome_id)
                     else:

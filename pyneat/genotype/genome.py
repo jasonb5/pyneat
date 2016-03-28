@@ -221,12 +221,12 @@ class Genome(object):
 
     def is_hidden(self, neuron):
         return True if (neuron >= self.neurons[0] and
-                neuron > Genome.MAX_HIDDEN) else False
+                neuron < Genome.MAX_HIDDEN) else False
 
     def is_output(self, neuron):
         return True if neuron >= Genome.MAX_HIDDEN else False
 
-    def mutate_gene(self, innovations):
+    def mutate_gene(self, innovations, conf):
         """Mutation by adding link.
 
         Mutates a genome by adding a link between two random neurons. The 
@@ -247,8 +247,12 @@ class Genome(object):
         n2 = self.random_neuron(False)
 
         # Try to fix illegal genes
-        if not (self.is_hidden(n1) and self.is_hidden(n2)):
-            return False
+        if ((self.is_input(n1) and self.is_input(n2)) or
+                (self.is_hidden(n1) and self.is_hidden(n2)) or
+                (self.is_output(n1) and self.is_output(n2))):
+            if not (conf.allow_recurrent and
+                    (self.is_hidden(n1) and self.is_hidden(n2))):
+                return False
         elif ((self.is_hidden(n1) or self.is_output(n1)) and
                 self.is_input(n2)):
             temp = n1

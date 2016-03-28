@@ -18,6 +18,7 @@ class Conf(object):
         self.num_input = 3
         self.num_output = 1
         self.runs = 1
+        self.allow_recurrent = False
 
     def to_json(self):
         return json.dumps(self.__dict__)

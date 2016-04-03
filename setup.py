@@ -2,5 +2,5 @@ from distutils.core import setup
 
 setup(name='pyneat',
         version='1.0',
-        packages=['pyneat/',],
+        packages=['pyneat', 'pyneat.genotype', 'pyneat.ann'],
         install_requires=['numpy', 'django'])

@@ -1,5 +1,5 @@
 from . import Gene
-from ml.ann import RecurrentNeuralNetwork as RNN
+from ..ann import RecurrentNeuralNetwork as RNN
 
 import copy
 import math

@@ -3,16 +3,19 @@ import sys
 import json
 import django
 
-sys.path.append('../pyneat-web')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'pyneat_web.settings'
+try:
+    from neatweb import models
+except ImportError:
+    sys.path.append('../pyneat-web')
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'pyneat_web.settings'
 
-from pyneat_web import settings
+    from pyneat_web import settings
 
-settings.DATABASES['default']['HOST'] = '127.0.0.1'
+    settings.DATABASES['default']['HOST'] = '127.0.0.1'
 
-django.setup()
+    django.setup()
 
-from neatweb import models
+    from neatweb import models
 
 class DummyDatabase(object):
     def push_experiment(self, name, conf):

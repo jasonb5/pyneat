@@ -42,11 +42,10 @@ class Experiment(object):
         name: Name of experiment.
         log: Logger for experiment class.
     """
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self.log = logging.getLogger('experiment')
 
-    def run(self, conf, db=None):
+    def run(self, name, conf, observer=None):
         """Runs experiment.
 
         Creates a population where each organism evaluates the given data.
@@ -70,10 +69,12 @@ class Experiment(object):
 
         exec conf.fitness_func in ns
 
-        db.push_experiment(self.name, conf)
+        if observer:
+            observer.notify_experiment(name, conf)
 
         for r in xrange(conf.runs):
-            db.push_population(r)
+            if observer:
+                observer.notify_population(r)
 
             pop = Population(conf)
 
@@ -92,4 +93,4 @@ class Experiment(object):
 
                         return
 
-                pop.epoch(db)
+                pop.epoch(observer)

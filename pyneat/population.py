@@ -175,7 +175,7 @@ class Population(object):
 
         self.species = filter(lambda x: not x.marked, self.species)
 
-    def epoch(self, db=None):
+    def epoch(self, observer):
         """Populations epoch.
 
         The beginning of a new generation. First the low performing organisms
@@ -201,7 +201,8 @@ class Population(object):
 
         self.remove_weak_species()
 
-        db.push_generation(self.generation, self.species)
+        if observer:
+            observer.notify_generation(self.generation, self.species)
 
         self.remove_marked()
 

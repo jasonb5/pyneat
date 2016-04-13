@@ -1,11 +1,16 @@
 from abc import ABCMeta
 from abc import abstractmethod
+from datetime import datetime
 
 class DataObserver(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def experiment(self, name, conf):
+    def experiment(self, name, conf, dt):
+        pass
+
+    @abstractmethod
+    def experiment_end(self, dt):
         pass
 
     @abstractmethod
@@ -23,9 +28,13 @@ class DataLogger(object):
     def add_observer(self, observer):
         self.__observers.append(observer)
 
-    def notify_experiment(self, name, conf):
+    def notify_experiment(self, name, conf, dt=datetime.now()):
         for o in self.__observers:
-            o.experiment(name, conf)
+            o.experiment(name, conf, dt)
+
+    def notify_experiment_end(self, dt=datetime.now()):
+        for o in self.__observers:
+            o.experiment_end(dt)
 
     def notify_population(self, pop_index):
         for o in self.__observers:

@@ -89,8 +89,14 @@ class Experiment(object):
                     o.fitness, o.winner = ns['evaluate'](net)
 
                     if o.winner:
+                        if observer:
+                            observer.notify_experiment_end()
+
                         self.log.info('Winner!!')
 
                         return
 
                 pop.epoch(observer)
+
+        if observer:
+            observer.notify_experiment_end()

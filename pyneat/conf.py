@@ -1,6 +1,27 @@
 import json
 
 class Conf(object):
+    FITNESS = """def evaluate(net):
+    data = ((0.0, 0.0, 1.0),
+            (1.0, 0.0, 1.0),
+            (0.0, 1.0, 1.0),
+            (1.0, 1.0, 1.0))
+
+    result = []
+    winner = False
+
+    for d in data:
+        result.append(net.activate(d))
+
+    error = result[0]+(1-result[1])+(1-result[2])+result[3]
+    fitness = math.pow(4-error, 2)
+
+    if result[0] < 0.5 and result[1] >= 0.5 and result[2] >= 0.5 and result[3] < 0.5:
+        winner = True
+
+    return fitness, winner
+    """
+
     def __init__(self, **kwargs):
         self.generations = kwargs.get('generations', 100)
         self.pop_size = kwargs.get('pop_size', 150)
@@ -14,7 +35,7 @@ class Conf(object):
         self.mutate_neuron_prob = kwargs.get('mutate_neuron_prob', 0.03)
         self.mutate_gene_prob = kwargs.get('mutate_gene_prob', 0.05)
         self.mutate_power = kwargs.get('mutate_power', 2.5)
-        self.fitness_func = kwargs.get('fitness_func', "")
+        self.fitness_func = kwargs.get('fitness_func', FITNESS)
         self.num_input = kwargs.get('num_input', 3)
         self.num_output = kwargs.get('num_output', 1)
         self.runs = kwargs.get('runs', 1)

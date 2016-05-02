@@ -19,7 +19,7 @@ class Population(object):
         self.conf = conf
         self.organisms = []
         self.species = []
-        self.generation = 0
+        self.generation = 1
         self.innovs = Innovations()
         self.log = logging.getLogger('population')
 

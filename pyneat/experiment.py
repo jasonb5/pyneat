@@ -74,7 +74,7 @@ class Experiment(object):
 
         for r in xrange(conf.runs):
             if observer:
-                observer.notify_population(r)
+                observer.notify_population(r+1)
 
             pop = Population(conf)
 

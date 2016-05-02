@@ -12,7 +12,7 @@ class Innovations(object):
         self.innov = 0
         self.neuron = 0
         self.genome = 0
-        self.species = 0
+        self.species = 1
 
     def next_species(self):
         next_id = self.species

@@ -35,7 +35,7 @@ class Conf(object):
         self.mutate_neuron_prob = kwargs.get('mutate_neuron_prob', 0.03)
         self.mutate_gene_prob = kwargs.get('mutate_gene_prob', 0.05)
         self.mutate_power = kwargs.get('mutate_power', 2.5)
-        self.fitness_func = kwargs.get('fitness_func', FITNESS)
+        self.fitness_func = kwargs.get('fitness_func', Conf.FITNESS)
         self.num_input = kwargs.get('num_input', 3)
         self.num_output = kwargs.get('num_output', 1)
         self.runs = kwargs.get('runs', 1)

@@ -90,6 +90,7 @@ class Experiment(object):
 
                     if o.winner:
                         if observer:
+                            observer.notify_generation(pop.generation, pop.species)
                             observer.notify_experiment_end()
 
                         self.log.info('Winner!!')

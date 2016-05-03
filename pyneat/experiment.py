@@ -72,6 +72,8 @@ class Experiment(object):
         if observer:
             observer.notify_experiment(name, conf)
 
+        step, max_step = 1, conf.runs*conf.generations
+
         for r in xrange(conf.runs):
             if observer:
                 observer.notify_population(r+1)
@@ -98,6 +100,13 @@ class Experiment(object):
                         return
 
                 pop.epoch(observer)
+
+                progress = round(float(step)*100/float(max_step), 2)
+
+                if observer:
+                    observer.notify_progress(progress=progress)
+
+                step += 1
 
         if observer:
             observer.notify_experiment_end()

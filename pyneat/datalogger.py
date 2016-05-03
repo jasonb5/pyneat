@@ -21,6 +21,10 @@ class DataObserver(object):
     def generation(self, gen_index, species):
         pass
 
+    @abstractmethod
+    def progress(self, progress, message):
+        pass
+
 class DataLogger(object):
     def __init__(self):
         self.__observers = []
@@ -43,3 +47,7 @@ class DataLogger(object):
     def notify_generation(self, gen_index, species):
         for o in self.__observers:
             o.generation(gen_index, species)
+
+    def notify_progress(self, progress=None, message=None):
+        for o in self.__observers:
+            o.progress(progress, message)

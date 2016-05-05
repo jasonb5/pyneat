@@ -171,7 +171,7 @@ class Genome(object):
 
         return random.choice(pool.keys())
 
-    def mutate_weights(self, power, rate, mut=0):
+    def mutate_weights(self, power, rate, mut=0, clamp=0):
         """Mutates all gene weights
         """
         #for g in self.genes:
@@ -213,6 +213,12 @@ class Genome(object):
                     g.weight = rand
             else:
                 g.weight = rand
+
+            if clamp > 0:
+                if g.weight > clamp:
+                    g.weight = clamp
+                elif g.weight < -clamp:
+                    g.weight = -clamp
 
             number += 1
 

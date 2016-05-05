@@ -37,7 +37,7 @@ class Population(object):
         for x in xrange(self.conf.pop_size):
             new_genome = genome.duplicate(x)
 
-            new_genome.mutate_weights(self.conf.mutate_power, 1.0, 1)
+            new_genome.mutate_weights(self.conf.mutate_power, 1.0, 1, self.conf.clamp_weights)
 
             org = Organism(new_genome)
 

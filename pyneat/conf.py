@@ -40,6 +40,7 @@ class Conf(object):
         self.num_output = kwargs.get('num_output', 1)
         self.runs = kwargs.get('runs', 1)
         self.allow_recurrent = kwargs.get('allow_recurrent', False)
+        self.clamp_weights = kwargs.get('clamp_weights', 0)
 
     def to_json(self):
         return json.dumps(self.__dict__)

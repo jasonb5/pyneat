@@ -259,8 +259,8 @@ class Genome(object):
             if not (conf.allow_recurrent and
                     (self.is_hidden(n1) and self.is_hidden(n2))):
                 return False
-        elif ((self.is_hidden(n1) or self.is_output(n1)) and
-                self.is_input(n2)):
+        elif (((self.is_hidden(n1) or self.is_output(n1)) and self.is_input(n2)) or 
+                (self.is_output(n1) and self.is_hidden(n2))):
             temp = n1
             n1 = n2
             n2 = temp
